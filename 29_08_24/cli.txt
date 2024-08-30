@@ -1,0 +1,140 @@
+mongosh> use test
+switched to db test
+test> db.students.insertMany([{ name: "Arun", age: 20,marks: 99,grade:"A++" },{ name: "Varun", age: 22,marks: 79,grade:"A"},{ name: "Aron", age: 24,marks: 90,grade:"B"}])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('66d02fbab0604118962710bd'),
+    '1': ObjectId('66d02fbab0604118962710be'),
+    '2': ObjectId('66d02fbab0604118962710bf')
+  }
+}
+test> db.students.find()
+[
+  {
+    _id: ObjectId('66d02fbab0604118962710bd'),
+    name: 'Arun',
+    age: 20,
+    marks: 99,
+    grade: 'A++'
+  },
+  {
+    _id: ObjectId('66d02fbab0604118962710be'),
+    name: 'Varun',
+    age: 22,
+    marks: 79,
+    grade: 'A'
+  },
+  {
+    _id: ObjectId('66d02fbab0604118962710bf'),
+    name: 'Aron',
+    age: 24,
+    marks: 90,
+    grade: 'B'
+  }
+]
+test> db.students.find({ $and : [{age : {$eq : 22}},{marks : {$eq : 79}}]})
+[
+  {
+    _id: ObjectId('66d02fbab0604118962710be'),
+    name: 'Varun',
+    age: 22,
+    marks: 79,
+    grade: 'A'
+  }
+]
+test> db.students.find({ $and : [{age : {$gte : 18}},{marks : {$gte : 80}}]})
+[
+  {
+    _id: ObjectId('66d02fbab0604118962710bd'),
+    name: 'Arun',
+    age: 20,
+    marks: 99,
+    grade: 'A++'
+  },
+  {
+    _id: ObjectId('66d02fbab0604118962710bf'),
+    name: 'Aron',
+    age: 24,
+    marks: 90,
+    grade: 'B'
+  }
+]
+test> db.students.find({ grade : {$eq : "A++"} })
+[
+  {
+    _id: ObjectId('66d02fbab0604118962710bd'),
+    name: 'Arun',
+    age: 20,
+    marks: 99,
+    grade: 'A++'
+  }
+]
+test> db.students.updateOne({name : "Arun"},{$set : {age : 18}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+test> db.students.find({ name : {$eq : "Arun"} })
+[
+  {
+    _id: ObjectId('66d02fbab0604118962710bd'),
+    name: 'Arun',
+    age: 18,
+    marks: 99,
+    grade: 'A++'
+  }
+]
+test> db.students.updateMany({name : "Arun"},{$set : {age : 20}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+test> db.students.find({ name : {$eq : "Arun"} })
+[
+  {
+    _id: ObjectId('66d02fbab0604118962710bd'),
+    name: 'Arun',
+    age: 20,
+    marks: 99,
+    grade: 'A++'
+  }
+]
+test> db.students.updateMany({age : 20},{$set : {marks : 90}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+test> db.students.find()
+[
+  {
+    _id: ObjectId('66d02fbab0604118962710bd'),
+    name: 'Arun',
+    age: 20,
+    marks: 90,
+    grade: 'A++'
+  },
+  {
+    _id: ObjectId('66d02fbab0604118962710be'),
+    name: 'Varun',
+    age: 22,
+    marks: 79,
+    grade: 'A'
+  },
+  {
+    _id: ObjectId('66d02fbab0604118962710bf'),
+    name: 'Aron',
+    age: 24,
+    marks: 90,
+    grade: 'B'
+  }
+]
