@@ -1,0 +1,293 @@
+mongosh> use test
+switched to db test
+test> db.students.find()
+[
+  {
+    _id: ObjectId('66d02fbab0604118962710bd'),
+    name: 'Arun',
+    age: 20,
+    marks: 90,
+    grade: 'A++'
+  },
+  {
+    _id: ObjectId('66d02fbab0604118962710be'),
+    name: 'Varun',
+    age: 22,
+    marks: 79,
+    grade: 'A'
+  },
+  {
+    _id: ObjectId('66d02fbab0604118962710bf'),
+    name: 'Aron',
+    age: 24,
+    marks: 90,
+    grade: 'B'
+  }
+]
+test> db.students.find({$or : [ { grade : { $eq : "A"}}, { marks : { $gt : 80}} ]})
+[
+  {
+    _id: ObjectId('66d02fbab0604118962710bd'),
+    name: 'Arun',
+    age: 20,
+    marks: 90,
+    grade: 'A++'
+  },
+  {
+    _id: ObjectId('66d02fbab0604118962710be'),
+    name: 'Varun',
+    age: 22,
+    marks: 79,
+    grade: 'A'
+  },
+  {
+    _id: ObjectId('66d02fbab0604118962710bf'),
+    name: 'Aron',
+    age: 24,
+    marks: 90,
+    grade: 'B'
+  }
+]
+test> db.students.find({$or : [ { grade : { $eq : "A++"}}, { marks : { $gt : 80}} ]})
+[
+  {
+    _id: ObjectId('66d02fbab0604118962710bd'),
+    name: 'Arun',
+    age: 20,
+    marks: 90,
+    grade: 'A++'
+  },
+  {
+    _id: ObjectId('66d02fbab0604118962710bf'),
+    name: 'Aron',
+    age: 24,
+    marks: 90,
+    grade: 'B'
+  }
+]
+test> db.students.find({marks : { $not : { $eq : 90} } })
+[
+  {
+    _id: ObjectId('66d02fbab0604118962710be'),
+    name: 'Varun',
+    age: 22,
+    marks: 79,
+    grade: 'A'
+  }
+]
+test> db.students.find({$nor : [ { grade : { $eq : "A++"}}, { marks : { $gt : 80}} ]})
+[
+  {
+    _id: ObjectId('66d02fbab0604118962710be'),
+    name: 'Varun',
+    age: 22,
+    marks: 79,
+    grade: 'A'
+  }
+]
+test> db.students.find({marks : {$exists : true}})
+[
+  {
+    _id: ObjectId('66d02fbab0604118962710bd'),
+    name: 'Arun',
+    age: 20,
+    marks: 90,
+    grade: 'A++'
+  },
+  {
+    _id: ObjectId('66d02fbab0604118962710be'),
+    name: 'Varun',
+    age: 22,
+    marks: 79,
+    grade: 'A'
+  },
+  {
+    _id: ObjectId('66d02fbab0604118962710bf'),
+    name: 'Aron',
+    age: 24,
+    marks: 90,
+    grade: 'B'
+  }
+]
+test> db.students.find({marks : {$exists : true, $nin : [79]}})
+[
+  {
+    _id: ObjectId('66d02fbab0604118962710bd'),
+    name: 'Arun',
+    age: 20,
+    marks: 90,
+    grade: 'A++'
+  },
+  {
+    _id: ObjectId('66d02fbab0604118962710bf'),
+    name: 'Aron',
+    age: 24,
+    marks: 90,
+    grade: 'B'
+  }
+]
+test> db.students.insertOne({name : "Raju", marks : 70, grade : "A"})
+{
+  acknowledged: true,
+  insertedId: ObjectId('66d1817dbd408d04292710bc')
+}
+test> db.students.find({age : {$exists : false}})
+[
+  {
+    _id: ObjectId('66d1817dbd408d04292710bc'),
+    name: 'Raju',
+    marks: 70,
+    grade: 'A'
+  }
+]
+test> db.students.find({marks : {$exists : true, $in : [79, 70]}})
+[
+  {
+    _id: ObjectId('66d02fbab0604118962710be'),
+    name: 'Varun',
+    age: 22,
+    marks: 79,
+    grade: 'A'
+  },
+  {
+    _id: ObjectId('66d1817dbd408d04292710bc'),
+    name: 'Raju',
+    marks: 70,
+    grade: 'A'
+  }
+]
+test> db.students.find({marks : {$exists : true, $nin : [79, 70]}})
+[
+  {
+    _id: ObjectId('66d02fbab0604118962710bd'),
+    name: 'Arun',
+    age: 20,
+    marks: 90,
+    grade: 'A++'
+  },
+  {
+    _id: ObjectId('66d02fbab0604118962710bf'),
+    name: 'Aron',
+    age: 24,
+    marks: 90,
+    grade: 'B'
+  }
+]
+test> db.students.find({marks : { $type : "int"}})
+[
+  {
+    _id: ObjectId('66d02fbab0604118962710bd'),
+    name: 'Arun',
+    age: 20,
+    marks: 90,
+    grade: 'A++'
+  },
+  {
+    _id: ObjectId('66d02fbab0604118962710be'),
+    name: 'Varun',
+    age: 22,
+    marks: 79,
+    grade: 'A'
+  },
+  {
+    _id: ObjectId('66d02fbab0604118962710bf'),
+    name: 'Aron',
+    age: 24,
+    marks: 90,
+    grade: 'B'
+  },
+  {
+    _id: ObjectId('66d1817dbd408d04292710bc'),
+    name: 'Raju',
+    marks: 70,
+    grade: 'A'
+  }
+]
+test> db.students.insertOne({ name : "Akhil", marks : "80", age : 20, grade : "A"})
+{
+  acknowledged: true,
+  insertedId: ObjectId('66d1830abd408d04292710bd')
+}
+test> db.students.find({marks : { $type : "string"}})
+[
+  {
+    _id: ObjectId('66d1830abd408d04292710bd'),
+    name: 'Akhil',
+    marks: '80',
+    age: 20,
+    grade: 'A'
+  }
+]
+test> db.students.updateOne({marks : '80'} , { $set : {marks : 80}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+test> db.students.find({marks : { $eq : 80}})
+[
+  {
+    _id: ObjectId('66d1830abd408d04292710bd'),
+    name: 'Akhil',
+    marks: 80,
+    age: 20,
+    grade: 'A'
+  }
+]
+test> db.students.updateMany({age : 20} , { $set : {grade : "A"}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 2,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+test> db.students.find({age : 20})
+[
+  {
+    _id: ObjectId('66d02fbab0604118962710bd'),
+    name: 'Arun',
+    age: 20,
+    marks: 90,
+    grade: 'A'
+  },
+  {
+    _id: ObjectId('66d1830abd408d04292710bd'),
+    name: 'Akhil',
+    marks: 80,
+    age: 20,
+    grade: 'A'
+  }
+]
+test> db.students.replaceOne({marks : 80} , {name : "Gokul", age : 20, marks : 90, grade : "O"})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+test> db.students.find({name : "Gokul"})
+[
+  {
+    _id: ObjectId('66d1830abd408d04292710bd'),
+    name: 'Gokul',
+    age: 20,
+    marks: 90,
+    grade: 'O'
+  }
+]
+test> db.students.findOneAndUpdate({name : "Arun"}, {$inc : {marks : 10}}, {projection : {name : 1, _id : 0}})
+{ name: 'Arun' }
+test> db.students.find({name : "Arun"})
+[
+  {
+    _id: ObjectId('66d02fbab0604118962710bd'),
+    name: 'Arun',
+    age: 20,
+    marks: 100,
+    grade: 'A'
+  }
+]
